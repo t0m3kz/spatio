@@ -1,6 +1,14 @@
 name: webhook
 on:
   workflow_dispatch:
+    inputs:
+      input1:
+        description: 'Input 1'
+        required: true
+        default: 'default value'
+      input2:
+        description: 'Input 2'
+        required: true
 jobs:
   webhook:
     runs-on: ubuntu-latest
