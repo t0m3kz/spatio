@@ -1,4 +1,4 @@
-name: spatio
+name: webhook
 on:
   repository_dispatch:
     types: [implement_changes]
