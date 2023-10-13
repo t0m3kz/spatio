@@ -5,11 +5,10 @@ on:
       data:
         description: 'Payload data'
         required: true
-        default: {}
 jobs:
   webhook:
     runs-on: ubuntu-latest
     steps:
       - name: Print inputs
         run: |
-          echo "Input 1: ${{ github.event.inputs.data | fromJson}}"
+          echo "Input 1: ${{ github.event.inputs.data }}"
