@@ -1,0 +1,11 @@
+name: spatio
+on:
+  repository_dispatch:
+    types: [implement_changes]
+jobs:
+  sample_job:
+    name: Sample job
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run pipeline
+        run: echo "Running pipeline triggered by job"
