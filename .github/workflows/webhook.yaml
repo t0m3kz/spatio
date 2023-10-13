@@ -1,7 +1,6 @@
 name: webhook
 on:
-  repository_dispatch:
-    types: [implement_changes]
+  workflow_dispatch:
 jobs:
   webhook:
     runs-on: ubuntu-latest

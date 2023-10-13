@@ -1,6 +1,6 @@
 name: spatio
 on:
-  repository_dispatch:
+  workflow_dispatch:
     types: [other]
 jobs:
   sample_job:
