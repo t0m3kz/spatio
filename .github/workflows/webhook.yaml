@@ -11,4 +11,4 @@ jobs:
     steps:
       - name: Print inputs
         run: |
-          echo "Input 1: ${{ github.event.inputs.data }}"
+          echo "Input 1: ${{ github.event.inputs.data | fromJson}}"
