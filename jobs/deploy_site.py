@@ -34,4 +34,4 @@ class NewBranch(Job):
             )
 
 
-register_jobs(NewBranch)
+register_jobs([NewBranch])
