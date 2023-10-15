@@ -30,7 +30,7 @@ class NewBranch(Job):
             site.validated_save()
         finally:
             self.logger.info(
-                f"Repository synchronization completed in {job_result.duration}"
+                f"Deployment completed in {job_result.duration}"
             )
 
 
