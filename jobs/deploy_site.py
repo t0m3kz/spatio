@@ -1,6 +1,7 @@
 """Branch Job"""
 from nautobot.extras.jobs import Job, StringVar
 from nautobot.dcim.models import Location, LocationType
+from nautobot.extras.models import Status
 
 name = "Deployment Jobs"
 
@@ -23,15 +24,13 @@ class NewBranch(Job):
         self.logger.info("Creating new branch office...")
 
         try:
-            print(site_name)
-            location_type = LocationType.objects.filter(name="Site").get()
             self.logger.info(
-                f"Deployment completed in {location_type}"
+                f"Adding Site {site_name}"
             )
             site = Location(
                 name=site_name,
                 location_type=LocationType.objects.filter(name="Site").get(),
-                status="Active",
+                status=Status.objects.filter(name="Active").get()
             )
             site.validated_save()
         finally:
