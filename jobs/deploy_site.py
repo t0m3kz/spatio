@@ -28,12 +28,12 @@ class NewBranch(Job):
             self.logger.info(
                 f"Deployment completed in {location_type}"
             )
-            # site = Location(
-            #     name=site_name,
-            #     location_type=LocationType.objects.filter(name="Site").get(),
-            #     status="Active",
-            # )
-            # site.validated_save()
+            site = Location(
+                name=site_name,
+                location_type=LocationType.objects.filter(name="Site").get().id,
+                status="Active",
+            )
+            site.validated_save()
         finally:
             self.logger.info(
                 f"Deployment completed in {job_result.duration}"
