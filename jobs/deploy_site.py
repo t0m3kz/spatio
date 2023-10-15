@@ -32,7 +32,7 @@ class NewBranch(Job):
         try:
             site = Location(
                 name=site_name,
-                location_type=LocationType.objects.filter(name="Site").get(),
+                location_type=LocationType.objects.get(name="Site"),
                 status=STATUS_PLANNED,
                 parent=Location.objects.get(name=city_name),
             )
