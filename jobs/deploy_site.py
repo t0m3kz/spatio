@@ -53,7 +53,7 @@ class NewBranch(Job):
             if response.status_code == 204:
                 self.logger.info(f"Site {site_name} in {city_name} is being deployed.")
                 workflows_url = (
-                    f"https://api.github.com/repos/{owner}/{repo}/actions/runs"
+                    "https://api.github.com/repos/t0m3kz/spatio/actions/runs"
                 )
                 # Let's wait a bit for the workflow to start
                 time.sleep(2)
