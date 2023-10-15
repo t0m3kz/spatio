@@ -23,15 +23,19 @@ class NewBranch(Job):
         self.logger.info("Creating new branch office...")
 
         try:
-            site = Location(
-                name=site_name,
-                location_type=LocationType.objects.filter(name="Site").get(),
-                status="Active",
+            print(site_name)
+            location_type = LocationType.objects.filter(name="Site").get()
+            self.logger.info(
+                f"Deployment completed in {location_type}"
             )
-            site.validated_save()
+            # site = Location(
+            #     name=site_name,
+            #     location_type=LocationType.objects.filter(name="Site").get(),
+            #     status="Active",
+            # )
+            # site.validated_save()
         finally:
             self.logger.info(
                 f"Deployment completed in {job_result.duration}"
             )
-
 
