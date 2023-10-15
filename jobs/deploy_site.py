@@ -1,4 +1,5 @@
 """Branch Job"""
+import os
 from nautobot.extras.jobs import Job, StringVar
 from nautobot.dcim.models import Location, LocationType
 from nautobot.extras.models import Status
@@ -22,7 +23,7 @@ class NewBranch(Job):
 
         job_result = self.job_result
         self.logger.info("Creating new branch office...")
-
+        github_pat = os.environ.get("NAUTOBOT_GITHUB_PAT")
         try:
             site = Location(
                 name=site_name,
@@ -32,7 +33,7 @@ class NewBranch(Job):
             )
             site.validated_save()
             self.logger.info(
-                f"Adding Site {site_name} in {city_name} to Nautobot"
+                f"Adding Site {site_name} in {city_name} to Nautobot {github_pat}"
             )
         finally:
             self.logger.info(
