@@ -1,4 +1,4 @@
-name: webhook
+name: Deploy from Nautobot
 on:
   workflow_dispatch:
     inputs:
@@ -6,9 +6,95 @@ on:
         description: 'Payload data'
         required: true
 jobs:
-  webhook:
+  pre-commit:  
+    name: Check pre-commit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v3
+      - uses: pre-commit/action@v3.0.0
+  validate:
+    name: Validate data
+    needs: pre-commit
     runs-on: ubuntu-latest
     steps:
       - name: Print inputs
         run: |
-          echo "Input 1: ${{ github.event.inputs.data }}"
+          echo "Delivered inputs from Nautobot : ${{ github.event.inputs.data }}"    
+      - uses: actions/checkout@v3
+      - name: Check out code repo
+        uses: actions/checkout@v3
+        with:
+          repository: t0m3kz/nornir-aci
+          token: ${{ secrets.PAT }}
+          path: nornir-aci
+      - name: Setup Python
+        uses: actions/setup-python@v3
+      - name: Install nornir-aci
+        run: |
+          pip install poetry
+          poetry config virtualenvs.create false
+          poetry install -C nornir-aci --without dev
+      - name: Run validation
+        run: |
+          echo "Validate data"
+  deploy:
+    name: Implement change
+    needs: validate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Check out code repo
+        uses: actions/checkout@v3
+        with:
+          repository: t0m3kz/nornir-aci
+          token: ${{ secrets.PAT }}
+          path: nornir-aci
+      - name: Setup Python
+        uses: actions/setup-python@v3
+      - name: Install nornir-aci
+        run: |
+          pip install poetry
+          poetry config virtualenvs.create false
+          poetry install -C nornir-aci --without dev
+      - name: Run impelementation
+        id: implement
+        run: |
+          poetry run -C nornir-aci aci_deploy -i nautobot.yaml -v
+      - name: Restore config
+        continue-on-error: true
+        if: ${{ failure() && steps.implement.conclusion == 'failure' }}
+        run: echo "restore config"
+  document:
+    name: Update documentation
+    needs: deploy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Check out code repo
+        uses: actions/checkout@v3
+        with:
+          repository: t0m3kz/nornir-aci
+          token: ${{ secrets.PAT }}
+          path: nornir-aci
+      - name: Checkout wiki code
+        uses: actions/checkout@v3
+        with:
+          repository: ${{github.repository}}.wiki
+          path: documentation
+      - name: Setup Python
+        uses: actions/setup-python@v3
+      - name: Install nornir-aci
+        run: |
+          pip install poetry
+          poetry config virtualenvs.create false
+          poetry install -C nornir-aci --without dev
+      - name: Generate documentation
+        run: poetry run -C nornir-aci aci_documentation -i nautobot.yaml -v
+      - name: Push to wiki
+        run: |
+          cd documentation
+          git config --local user.email "tomek@mastuazi.com"
+          git config --local user.name "Tomek Zajac"
+          git add .
+          git diff-index --quiet HEAD || git commit -m "Add changes" && git push          
