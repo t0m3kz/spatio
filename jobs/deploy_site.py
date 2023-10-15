@@ -27,6 +27,7 @@ class NewBranch(Job):
         try:
             site = Location(
                 name=site_name,
+                location_type="Site"
             )
             site.validated_save()
         finally:
