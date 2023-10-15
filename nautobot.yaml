@@ -3,7 +3,7 @@ inventory:
   plugin: GQLNautobotInventory
   options:
     nautobot_url: https://next.demo.nautobot.com/
-    nautobot_token: ${NAUTOBOT_TOKEN}
+    nautobot_token: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
     ssl_verify: false
 runner:
   plugin: threaded
