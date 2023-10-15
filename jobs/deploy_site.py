@@ -83,10 +83,10 @@ class NewBranch(Job):
                                 "Workflow failed with %s.",
                                 workflow["conclusion"]
                             )
-                            break
+                            raise Exception("Workflow failed.")
                     else:
                         self.logger.error("Failed to get workflow status.")
-                        break
+                        raise ConnectionError("Failed to get workflow status.")
             else:
                 self.logger.error(
                     "Site %s in %s cannot be deployed. Status code: %d",
