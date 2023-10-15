@@ -1,6 +1,6 @@
 """Branch Job"""
 from nautobot.core.celery import register_jobs
-from nautobot.extras.jobs import Job, StringVar
+from nautobot.extras.jobs import Job, StringVar, ObjectVar
 from nautobot.dcim.models import Location
 
 
@@ -9,11 +9,9 @@ name = "Deployment Jobs"
 class NewBranch(Job):
     """
     System job to clone and/or pull a Git repository, then invoke `refresh_datasource_content()`.
-    """
-
-    field_order = ["site_name", "switch_count", "switch_model"]
+    """  
     site_name = StringVar(description="Name of the new site")
-
+    )
     class Meta:
         """Meta class."""
         name = "New Branch"
@@ -21,7 +19,7 @@ class NewBranch(Job):
         has_sensitive_variables = False
 
 
-    def run(self, data):
+    def run(self, site_name):
         """Execute Job."""
 
         job_result = self.job_result
@@ -29,7 +27,7 @@ class NewBranch(Job):
 
         try:
             site = Location(
-                name=data["site_name"],
+                name=site_name,
             )
             site.validated_save()
         finally:
