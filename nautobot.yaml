@@ -2,11 +2,10 @@
 inventory:
   plugin: GQLNautobotInventory
   options:
-    nautobot_url: https://next.demo.nautobot.com/ 
+    nautobot_url: https://next.demo.nautobot.com/
     nautobot_token: ${NAUTOBOT_TOKEN}
     ssl_verify: false
 runner:
   plugin: threaded
   options:
     num_workers: 200
-

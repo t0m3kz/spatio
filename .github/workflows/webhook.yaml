@@ -6,7 +6,7 @@ on:
         description: 'Payload data'
         required: true
 jobs:
-  pre-commit:  
+  pre-commit:
     name: Check pre-commit
     runs-on: ubuntu-latest
     steps:
@@ -20,7 +20,7 @@ jobs:
     steps:
       - name: Print inputs
         run: |
-          echo "Delivered inputs from Nautobot : ${{ github.event.inputs.data }}"    
+          echo "Delivered inputs from Nautobot : ${{ github.event.inputs.data }}"
       - uses: actions/checkout@v3
       - name: Check out code repo
         uses: actions/checkout@v3
@@ -97,4 +97,4 @@ jobs:
           git config --local user.email "tomek@mastuazi.com"
           git config --local user.name "Tomek Zajac"
           git add .
-          git diff-index --quiet HEAD || git commit -m "Add changes" && git push          
+          git diff-index --quiet HEAD || git commit -m "Add changes" && git push
