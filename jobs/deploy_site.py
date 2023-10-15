@@ -4,6 +4,8 @@ from nautobot.extras.jobs import Job, StringVar
 from nautobot.dcim.models import Location
 
 
+name = "Deployment Jobs"
+
 class NewBranch(Job):
     """
     System job to clone and/or pull a Git repository, then invoke `refresh_datasource_content()`.
