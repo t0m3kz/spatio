@@ -1,5 +1,5 @@
 """Branch Job"""
-from nautobot.extras.jobs import Job, StringVar, ObjectVar
+from nautobot.extras.jobs import Job, StringVar
 from nautobot.dcim.models import Location, LocationType
 
 name = "Deployment Jobs"
@@ -25,7 +25,7 @@ class NewBranch(Job):
         try:
             site = Location(
                 name=site_name,
-                location_type=LocationType.objects.filter(name="Site").name,
+                location_type=LocationType.objects.filter(name="Site").get("id"),
                 status="Active",
             )
             site.validated_save()
