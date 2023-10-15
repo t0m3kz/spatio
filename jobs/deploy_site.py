@@ -26,23 +26,22 @@ class NewBranch(Job):
 
     def run(self, site_name, city_name, token):
         """Execute Job."""
-
+        STATUS_PLANNED = Status.objects.get(name="Planned")
         job_result = self.job_result
         self.logger.info("Creating new branch office...")
         try:
             site = Location(
                 name=site_name,
                 location_type=LocationType.objects.filter(name="Site").get(),
-                status=Status.objects.filter(name="Active").get(),
-                parent=Location.objects.filter(name=city_name).get(),
+                status=STATUS_PLANNED,
+                parent=Location.objects.get(name=city_name),
             )
             site.validated_save()
-            self.logger.info(f"Adding Site {site_name} in {city_name} to Nautobot")
+            self.logger.info("Created new location", extra={"object": site})
             headers = {
                 "Accept": "application/vnd.github.v3+json",
                 "Authorization": f"token {token}",
             }
-
             # The data for the API request. This should match the inputs for your workflow.
             url = "https://api.github.com/repos/t0m3kz/spatio/actions/workflows/72607301/dispatches"
             data = {
@@ -63,22 +62,36 @@ class NewBranch(Job):
                     response = requests.get(workflows_url, headers=headers, timeout=10)
                     if response.status_code == 200:
                         workflow = response.json()["workflow_runs"][0]
-                        if workflow["conclusion"] is not None:
+
+                        if workflow["status"] == "queued":
+                            self.logger.info("Workflow queued. Waiting...")
+                            time.sleep(20)
+                        elif workflow["status"] == "in_progress":
+                            self.logger.info("Workflow in progress. Waiting...")
+                            time.sleep(20)
+                        elif (
+                            workflow["conclusion"] == "success"
+                            and workflow["status"] == "completed"
+                        ):
                             self.logger.info(
-                                f"Deployment completed in {datetime.datetime.now() - start_time}"
+                                "Workflow completed in : %s.",
+                                datetime.datetime.now() - start_time
                             )
                             break
                         else:
-                            self.logger.info("Workflow still running. Waiting...")
-                            print("Workflow still running. Waiting...")
-                            time.sleep(5)
+                            self.logger.error(
+                                "Workflow failed with %s.",
+                                workflow["conclusion"]
+                            )
+                            break
                     else:
-                        print("Failed to get workflow status.")
+                        self.logger.error("Failed to get workflow status.")
                         break
             else:
                 self.logger.error(
-                    f"Site {site_name} in {city_name} cannot be deployed. {response.status_code}"
+                    "Site %s in %s cannot be deployed. Status code: %d",
+                    site_name, city_name, response.status_code
                 )
 
         finally:
-            self.logger.info(f"Deployment completed in {job_result.duration}")
+            self.logger.info("Deployment completed in %s", job_result.duration)
