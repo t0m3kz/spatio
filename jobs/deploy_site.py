@@ -1,15 +1,13 @@
 """Branch Job"""
-from nautobot.core.celery import register_jobs
 from nautobot.extras.jobs import Job, StringVar, ObjectVar
-from nautobot.dcim.models import Location
-
+from nautobot.dcim.models import Location, LocationType
 
 name = "Deployment Jobs"
 
 
 class NewBranch(Job):
     """
-    System job to deploy a new branch office """
+    System job to deploy a new branch office """   
     site_name = StringVar(description="Name of the new site")
 
     class Meta:
@@ -27,7 +25,8 @@ class NewBranch(Job):
         try:
             site = Location(
                 name=site_name,
-                location_type="Site"
+                location_type=LocationType.objects.filter(name="Site").id,
+                status="Active",
             )
             site.validated_save()
         finally:
