@@ -4,4 +4,3 @@ from .deploy_site import NewBranch
 
 jobs = [NewBranch]
 register_jobs(*jobs)
-
