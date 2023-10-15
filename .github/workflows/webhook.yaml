@@ -65,6 +65,8 @@ jobs:
         continue-on-error: true
         if: ${{ failure() && steps.implement.conclusion == 'failure' }}
         run: echo "restore config"
+      - name: Update Nautobot
+        run: echo "Update Nautobot and remove temporary TAGs"        
   document:
     name: Update documentation
     needs: deploy
