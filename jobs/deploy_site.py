@@ -24,9 +24,6 @@ class NewBranch(Job):
         self.logger.info("Creating new branch office...")
 
         try:
-            self.logger.info(
-                f"Adding Site {site_name}"
-            )
             site = Location(
                 name=site_name,
                 location_type=LocationType.objects.filter(name="Site").get(),
@@ -34,6 +31,9 @@ class NewBranch(Job):
                 parent=Location.objects.filter(name=city_name).get(),
             )
             site.validated_save()
+            self.logger.info(
+                f"Adding Site {site_name} in {city_name} to Nautobot"
+            )
         finally:
             self.logger.info(
                 f"Deployment completed in {job_result.duration}"
