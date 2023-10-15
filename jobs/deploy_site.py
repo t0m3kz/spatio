@@ -9,13 +9,15 @@ class NewBranch(Job):
     System job to clone and/or pull a Git repository, then invoke `refresh_datasource_content()`.
     """
 
+    field_order = ["site_name", "switch_count", "switch_model"]
+    site_name = StringVar(description="Name of the new site")
+
     class Meta:
         """Meta class."""
-
         name = "New Branch"
         description = "Provision a new branch site"
-        field_order = ["site_name", "switch_count", "switch_model"]
-        site_name = StringVar(description="Name of the new site")
+        has_sensitive_variables = False
+
 
     def run(self, data):
         """Execute Job."""
