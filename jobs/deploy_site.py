@@ -25,7 +25,7 @@ class NewBranch(Job):
         try:
             site = Location(
                 name=site_name,
-                location_type=LocationType.objects.filter(name="Site").id,
+                location_type=LocationType.objects.filter(name="Site").name,
                 status="Active",
             )
             site.validated_save()
