@@ -38,5 +38,3 @@ class NewBranch(Job):
             )
 
 
-jobs = [NewBranch]
-register_jobs(*jobs)
