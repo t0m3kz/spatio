@@ -22,6 +22,7 @@ class NewTenant(Job):
         name = "New Branch"
         description = "Provision a new branch site"
         has_sensitive_variables = False
+        approval_required = True
 
     def create_new_location(self, site_name, city_name):
         STATUS_PLANNED = Status.objects.get(name="Planned")
