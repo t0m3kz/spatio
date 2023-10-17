@@ -24,6 +24,9 @@ class NewBranch(Job):
         description = "Provision a new branch site"
         has_sensitive_variables = False
 
+    def __call__(self, *args, **kwargs):
+        return super().__call__(*args, **kwargs)
+
     def run(self, site_name, city_name, token):
         """Execute Job."""
         STATUS_PLANNED = Status.objects.get(name="Planned")
@@ -75,13 +78,12 @@ class NewBranch(Job):
                         ):
                             self.logger.info(
                                 "Workflow completed in : %s.",
-                                datetime.datetime.now() - start_time
+                                datetime.datetime.now() - start_time,
                             )
                             break
                         else:
                             self.logger.error(
-                                "Workflow failed with %s.",
-                                workflow["conclusion"]
+                                "Workflow failed with %s.", workflow["conclusion"]
                             )
                             raise Exception("Workflow failed.")
                     else:
@@ -90,8 +92,65 @@ class NewBranch(Job):
             else:
                 self.logger.error(
                     "Site %s in %s cannot be deployed. Status code: %d",
-                    site_name, city_name, response.status_code
+                    site_name,
+                    city_name,
+                    response.status_code,
                 )
 
         finally:
             self.logger.info("Deployment completed in %s", job_result.duration)
+
+    def push_to_repo(self):
+        headers = {
+            "Accept": "application/vnd.github.v3+json",
+            "Authorization": f"token {token}",
+        }
+        # The data for the API request. This should match the inputs for your workflow.
+        url = "https://api.github.com/repos/t0m3kz/spatio/actions/workflows/72607301/dispatches"
+        data = {
+            "ref": "main",
+            "inputs": {"data": "deploy_branch"},
+        }
+        response = requests.post(url, headers=headers, json=data, timeout=10)
+        if response.status_code == 204:
+            self.logger.info(f"Site {site_name} in {city_name} is being deployed.")
+            workflows_url = "https://api.github.com/repos/t0m3kz/spatio/actions/runs"
+            # Let's wait a bit for the workflow to start
+            time.sleep(2)
+            # Wait until the workflow is completed
+            start_time = datetime.datetime.now()
+            while True:
+                response = requests.get(workflows_url, headers=headers, timeout=10)
+                if response.status_code == 200:
+                    workflow = response.json()["workflow_runs"][0]
+
+                    if workflow["status"] == "queued":
+                        self.logger.info("Workflow queued. Waiting...")
+                        time.sleep(20)
+                    elif workflow["status"] == "in_progress":
+                        self.logger.info("Workflow in progress. Waiting...")
+                        time.sleep(20)
+                    elif (
+                        workflow["conclusion"] == "success"
+                        and workflow["status"] == "completed"
+                    ):
+                        self.logger.info(
+                            "Workflow completed in : %s.",
+                            datetime.datetime.now() - start_time,
+                        )
+                        break
+                    else:
+                        self.logger.error(
+                            "Workflow failed with %s.", workflow["conclusion"]
+                        )
+                        raise Exception("Workflow failed.")
+                else:
+                    self.logger.error("Failed to get workflow status.")
+                    raise ConnectionError("Failed to get workflow status.")
+        else:
+            self.logger.error(
+                "Site %s in %s cannot be deployed. Status code: %d",
+                site_name,
+                city_name,
+                response.status_code,
+            )
