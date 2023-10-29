@@ -15,8 +15,11 @@ class NewTenant(Job):
     System job to deploy a new branch office
     """
 
-    location_type = ObjectVar(
+    location = ObjectVar(
         model=Location,
+        query_params={
+            "location_type": "Site"
+        },
         display_field="name"
     )
 
