@@ -6,7 +6,7 @@ from nautobot.extras.jobs import Job, StringVar
 from nautobot.dcim.models import Location, LocationType
 from nautobot.extras.models import Status
 
-name = "Deployment Jobs"
+name = "ACI Jobs"
 
 
 class NewBranch(Job):
@@ -16,6 +16,7 @@ class NewBranch(Job):
     site_name = StringVar(description="Name of the new site")
     city_name = StringVar(description="City of the new site")
     token = StringVar(description="Github Personal Access Token")
+    devices =
 
     class Meta:
         """Meta class."""
@@ -25,6 +26,7 @@ class NewBranch(Job):
         has_sensitive_variables = False
 
     def __call__(self, *args, **kwargs):
+        """Call the job."""
         return super().__call__(*args, **kwargs)
 
     def run(self, site_name, city_name, token):

@@ -1,9 +1,13 @@
+"""Branch Job"""
 import time
 import datetime
 import requests
-from nautobot.extras.jobs import Job, StringVar, BooleanVar
-from nautobot.dcim.models import Location, LocationType
+from nautobot.extras.jobs import Job, StringVar, ObjectVar, BooleanVar, ChoiceVar
+from nautobot.dcim.models import Location
+from nautobot.ipam.models import Namespace
 from nautobot.extras.models import Status
+
+name = "ACI Jobs"
 
 
 class NewTenant(Job):
@@ -11,10 +15,28 @@ class NewTenant(Job):
     System job to deploy a new branch office
     """
 
-    site_name = StringVar(description="Name of the new site")
-    city_name = StringVar(description="City of the new site")
-    token = StringVar(description="Github Personal Access Token")
-    something = BooleanVar(description="Something")
+    location_type = ObjectVar(
+        model=Location,
+        display_field="name"
+    )
+
+    aci_tenant = ObjectVar(
+        model=Namespace,
+        query_params={
+            "location": "$location",
+            "cf_namespace_type": "Tenant"
+        },
+        display_field="name"
+    )
+
+    CHOICES = (
+        ('task1', 'Deloyment Scenario 1'),
+        ('task2', 'Deloyment Scenario 2'),
+        ('task3', 'Deloyment Scenario 3'),
+        ('task4', 'Deloyment Scenario 4'),
+    )
+
+    deployment = ChoiceVar(choices=CHOICES)
 
     class Meta:
         """Meta class."""
