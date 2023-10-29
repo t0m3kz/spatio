@@ -16,7 +16,6 @@ class NewBranch(Job):
     site_name = StringVar(description="Name of the new site")
     city_name = StringVar(description="City of the new site")
     token = StringVar(description="Github Personal Access Token")
-    devices =
 
     class Meta:
         """Meta class."""
