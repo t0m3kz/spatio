@@ -15,10 +15,17 @@ class NewTenant(Job):
     System job to deploy a new branch office
     """
 
+    TENANT_TYPE = (
+        ('Region', 'Streatched'),
+        ('Site', 'Local'),
+    )
+
+    deployment_type = ChoiceVar(choices=TENANT_TYPE)
+
     location = ObjectVar(
         model=Location,
         query_params={
-            "location_type": "Site"
+            "location_type": "$deployment_type"
         },
         display_field="name"
     )
