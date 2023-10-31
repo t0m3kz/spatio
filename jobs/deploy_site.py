@@ -2,7 +2,7 @@
 import time
 import datetime
 import requests
-from nautobot.extras.jobs import Job, StringVar
+from nautobot.extras.jobs import Job, StringVar, ObjectVar
 from nautobot.dcim.models import Location, LocationType
 from nautobot.extras.models import Status
 
@@ -14,7 +14,13 @@ class NewBranch(Job):
     System job to deploy a new branch office"""
 
     site_name = StringVar(description="Name of the new site")
-    city_name = StringVar(description="City of the new site")
+    city_name = ObjectVar(
+        model=Location,
+        query_params={
+            "location_type": "City"
+        },
+        display_field="name"
+    )
     token = StringVar(description="Github Personal Access Token")
 
     class Meta:
