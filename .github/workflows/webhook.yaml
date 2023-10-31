@@ -12,6 +12,8 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v3
+        with:
+          python-version: 3.11
       - uses: pre-commit/action@v3.0.0
   validate:
     name: Validate data
@@ -29,6 +31,8 @@ jobs:
           token: ${{ secrets.PAT }}
           path: nornir-aci
       - name: Setup Python
+        with:
+          python-version: 3.11
         uses: actions/setup-python@v3
       - name: Install nornir-aci
         run: |
@@ -54,6 +58,8 @@ jobs:
           path: nornir-aci
       - name: Setup Python
         uses: actions/setup-python@v3
+        with:
+          python-version: 3.11
       - name: Install nornir-aci
         run: |
           pip install poetry
@@ -88,6 +94,8 @@ jobs:
           path: documentation
       - name: Setup Python
         uses: actions/setup-python@v3
+        with:
+          python-version: 3.11
       - name: Install nornir-aci
         run: |
           pip install poetry
