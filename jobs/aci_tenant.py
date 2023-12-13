@@ -62,15 +62,10 @@ class AciTenant(Job):
                     "role": "tenant",
                 },
             },
-            _relationships={
-                "nested_namespaces": {
-                    "destination": {"objects": [{"name": "Global"}]}
-                },
-            },
-
         )
         tenant.tags.add(Tag.objects.get(name="ACI"))
         tenant.tags.add(Tag.objects.get(name=environment))
+        tenant.destination_for_associations = Namespace.objects.get(name="Global")
         tenant.validated_save()
         self.logger.info("Created new location %s", tenant_name)
         return tenant
