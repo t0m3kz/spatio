@@ -62,7 +62,7 @@ class AciTenant(Job):
                     "role": "tenant",
                 },
             },
-            relationships={
+            _relationships={
                 "nested_namespaces": {
                     "destination": {"objects": [{"name": "Global"}]}
                 },
