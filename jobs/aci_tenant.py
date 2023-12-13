@@ -2,12 +2,12 @@
 import time
 import datetime
 import requests
-from nautobot.extras.jobs import Job, StringVar, ObjectVar, BooleanVar, ChoiceVar
+from nautobot.extras.jobs import Job, StringVar, ObjectVar, ChoiceVar
 from nautobot.dcim.models import Location
 from nautobot.ipam.models import Namespace
 from nautobot.extras.models import Tag
 
-name = "Cisco ACI Jobs"
+name = "Cisco ACI Jobs"  # pylint: disable=invalid-name
 
 
 class AciTenant(Job):
@@ -64,7 +64,7 @@ class AciTenant(Job):
             },
         )
         tenant.tags.add(Tag.objects.get(name="ACI"))
-        # tenant.tags.add(Tag.objects.get(name=environment))
+        tenant.tags.add(Tag.objects.get(name=environment))
         # tenant.destination_for_associations.add(
         #     Namespace.objects.get(name="ACI")
         # )
