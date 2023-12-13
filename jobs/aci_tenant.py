@@ -53,7 +53,7 @@ class AciTenant(Job):
             description=f"Tenant for {tenant_name}",
             location=Location.objects.get(name=site),
             # tags=[environment, "ACI"],
-            _custom_field_data={
+            custom_field_data={
                 "namespace_type": "Tenant",
                 "namespace_config": {
                     "aci_name": tenant_name,
@@ -62,12 +62,15 @@ class AciTenant(Job):
                     "role": "tenant",
                 },
             },
+            relationships={
+                "nested_namespaces": {
+                    "destination": {"objects": [{"name": "Global"}]}
+                },
+            },
+
         )
         tenant.tags.add(Tag.objects.get(name="ACI"))
         tenant.tags.add(Tag.objects.get(name=environment))
-        # tenant.destination_for_associations.add(
-        #     Namespace.objects.get(name="ACI")
-        # )
         tenant.validated_save()
         self.logger.info("Created new location %s", tenant_name)
         return tenant

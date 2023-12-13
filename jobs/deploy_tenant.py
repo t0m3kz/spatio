@@ -61,7 +61,7 @@ class NewTenant(Job):
     favorite_colors = CheckboxSelectMultiple(choices=FAVORITE_COLORS_CHOICES)
 
 
-    class Meta:
+    class Meta:  # pylint: disable=too-few-public-methods
         """Meta class."""
 
         name = "New Tenant Options"
