@@ -40,6 +40,8 @@ class NewBd(Job):
         display_field="name"
     )
 
+
+
     CHOICES = (
         ('task1', 'Deloyment Scenario 1'),
         ('task2', 'Deloyment Scenario 2'),
