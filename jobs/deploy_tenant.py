@@ -64,7 +64,7 @@ class NewTenant(Job):
     class Meta:
         """Meta class."""
 
-        name = "New Tenant"
+        name = "New Tenant Options"
         description = "Provision a new branch site"
         has_sensitive_variables = False
         approval_required = True
