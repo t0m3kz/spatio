@@ -62,10 +62,12 @@ class AciTenant(Job):
                 },
             },
             # source_ipam_namespace=Namespace.objects.get(name="Global"),
-            source_for_associations=set([Namespace.objects.get(name="Global").id])
-            # source_for_associations={
-            #     "source_ipam_namespace": Namespace.objects.get(name="Global").id
-            # }
+            # source_ipam_namespace=Namespace.objects.get(name="Global"),
+
+            # source_for_associations=set([Namespace.objects.get(name="Global").id])
+            source_for_associations={
+                "source_ipam_namespace": Namespace.objects.get(name="Global")
+            }
         )
         tenant.tags.add(Tag.objects.get(name="ACI"))
         tenant.tags.add(Tag.objects.get(name=environment))
