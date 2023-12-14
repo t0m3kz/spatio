@@ -66,7 +66,8 @@ class AciTenant(Job):
 
             # source_for_associations=set([Namespace.objects.get(name="Global").id])
             source_for_associations={
-                "source_id": Namespace.objects.get(name="Global")
+                "source_id": Namespace.objects.get(name="Global").id,
+                "source_type": "Namespace",
             }
         )
         tenant.tags.add(Tag.objects.get(name="ACI"))
