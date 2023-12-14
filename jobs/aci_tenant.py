@@ -65,12 +65,13 @@ class AciTenant(Job):
             # source_ipam_namespace=Namespace.objects.get(name="Global"),
 
             # source_for_associations=
-            source_for_associations={
-                "source_id": Namespace.objects.get(name="Global").id,
-            }
+            # source_for_associations= source_ipam_namespace.set()
+            #     "source_id": Namespace.objects.get(name="Global").id,
+            # }
         )
         tenant.tags.add(Tag.objects.get(name="ACI"))
         tenant.tags.add(Tag.objects.get(name=environment))
+        tenant.source_for_associations.source_ipam_namespace.set(Namespace.objects.get(name="Global").id)
         # tenant.source_for_associations.add(source_id=Namespace.objects.get(name="Global").id)
         # tenant.source_for_associations.add(
         # tenant.source_for_associations.add(
