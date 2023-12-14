@@ -5,7 +5,7 @@ import requests
 from nautobot.extras.jobs import Job, StringVar, ObjectVar, ChoiceVar
 from nautobot.dcim.models import Location
 from nautobot.ipam.models import Namespace
-from nautobot.extras.models import Tag, RelationshipAssociation
+from nautobot.extras.models import Tag, RelationshipAssociation, Relationship
 
 name = "Cisco ACI Jobs"  # pylint: disable=invalid-name
 
@@ -84,10 +84,11 @@ class AciTenant(Job):
         # )
         tenant.validated_save()
         relationship = RelationshipAssociation(
-            # source_type="ipam.namespace",
+            source_type="ipam.namespace",
             source_id=Namespace.objects.get(name=f"{environment}_{site}_{tenant_name}").id,
-            # destination_type="ipam.namespace",
+            destination_type="ipam.namespace",
             destination_id=Namespace.objects.get(name="Global").id,
+            relationship=Relationship.objects.get(display="Nested Namespaces"),
         )
         relationship.validated_save()
         self.logger.info("Created new tenant %s", tenant_name)
