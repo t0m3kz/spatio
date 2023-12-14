@@ -5,7 +5,7 @@ import requests
 from nautobot.extras.jobs import Job, StringVar, ObjectVar, ChoiceVar
 from nautobot.dcim.models import Location
 from nautobot.ipam.models import Namespace
-from nautobot.extras.models import Tag, Relationship
+from nautobot.extras.models import Tag, RelationshipAssociation
 
 name = "Cisco ACI Jobs"  # pylint: disable=invalid-name
 
@@ -53,7 +53,7 @@ class AciTenant(Job):
             description=f"Tenant for {tenant_name}",
             location=Location.objects.get(name=site),
             # tags=[environment, "ACI"],
-            custom_field_data={
+            _custom_field_data={
                 "namespace_type": "Tenant",
                 "namespace_config": {
                     "aci_name": tenant_name,
@@ -62,11 +62,19 @@ class AciTenant(Job):
                     "role": "tenant",
                 },
             },
+            source_for_associations={
+                "source_id": Namespace.objects.get(name="Global").id,
+            }
         )
         tenant.tags.add(Tag.objects.get(name="ACI"))
         tenant.tags.add(Tag.objects.get(name=environment))
-        tenant.destination_for_associations.add()
         tenant.validated_save()
+        # relationship = RelationshipAssociation.objects.create(
+        #     source_type="Namespace",
+        #     source_id=tenant.id,
+        #     destination_type="Tenant",
+        #     destination_id=tenant.id,
+        # )
         self.logger.info("Created new location %s", tenant_name)
         return tenant
 
