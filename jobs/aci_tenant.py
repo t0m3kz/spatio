@@ -53,7 +53,7 @@ class AciTenant(Job):
             description=f"Tenant for {tenant_name}",
             location=Location.objects.get(name=site),
             # tags=[environment, "ACI"],
-            custom_field={
+            custom_fields={
                 "namespace_type": "Tenant",
                 "namespace_config": {
                     "aci_name": tenant_name,
