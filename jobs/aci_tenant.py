@@ -88,7 +88,7 @@ class AciTenant(Job):
             source_id=Namespace.objects.get(name=f"{environment}_{site}_{tenant_name}").id,
             destination_type="ipam.namespace",
             destination_id=Namespace.objects.get(name="Global").id,
-            relationship=Relationship.objects.get(display="Nested Namespaces"),
+            relationship=Relationship.objects.get(label="Nested Namespaces"),
         )
         _relationship.validated_save()
         self.logger.info("Created new tenant %s", tenant_name)
