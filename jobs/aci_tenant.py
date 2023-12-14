@@ -72,7 +72,7 @@ class AciTenant(Job):
         )
         tenant.tags.add(Tag.objects.get(name="ACI"))
         tenant.tags.add(Tag.objects.get(name=environment))
-        tenant.source_for_associations.add(source_id=Namespace.objects.get(name="Global").id)
+        # tenant.source_for_associations.add(source_id=Namespace.objects.get(name="Global").id)
         # tenant.source_for_associations.add(
         # tenant.source_for_associations.add(
         #     RelationshipAssociation.objects.create(
@@ -83,12 +83,13 @@ class AciTenant(Job):
         #     )
         # )
         tenant.validated_save()
-        # relationship = RelationshipAssociation.objects.create(
-        #     source_type="Namespace",
-        #     source_id=tenant.id,
-        #     destination_type="Tenant",
-        #     destination_id=tenant.id,
-        # )
+        relationship = RelationshipAssociation.objects.create(
+            source_type="ipam.namespace",
+            source_id=Namespace.objects.get(name="Global").id,
+            destination_type="ipam.namespace",
+            destination_id=Namespace.objects.get(name=f"{environment}_{site}_{tenant_name}").id,
+        )
+        relationship.validated_save()
         self.logger.info("Created new location %s", tenant_name)
         return tenant
 
