@@ -48,7 +48,7 @@ class AciTenant(Job):
 
     def create_new_tenant(self, tenant_name, environment, site):
         """Create new tenant."""
-        tenant = Namespace.objects.create(
+        tenant = Namespace(
             name=f"{environment}_{site}_{tenant_name}",
             description=f"Tenant for {tenant_name}",
             location=Location.objects.get(name=site),
@@ -83,7 +83,7 @@ class AciTenant(Job):
         #     )
         # )
         tenant.validated_save()
-        relationship = RelationshipAssociation.objects.create(
+        relationship = RelationshipAssociation(
             source_type="ipam.namespace",
             source_id=Namespace.objects.get(name="Global").id,
             destination_type="ipam.namespace",
