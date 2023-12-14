@@ -52,7 +52,6 @@ class AciTenant(Job):
             name=f"{environment}_{site}_{tenant_name}",
             description=f"Tenant for {tenant_name}",
             location=Location.objects.get(name=site),
-            # tags=[environment, "ACI"],
             _custom_field_data={
                 "namespace_type": "Tenant",
                 "namespace_config": {
@@ -62,12 +61,20 @@ class AciTenant(Job):
                     "role": "tenant",
                 },
             },
-            source_for_associations={
-                "source_id": Namespace.objects.get(name="Global").id,
-            }
+            # source_for_associations={
+            #     "source_id": Namespace.objects.get(name="Global").id,
+            # }
         )
         tenant.tags.add(Tag.objects.get(name="ACI"))
         tenant.tags.add(Tag.objects.get(name=environment))
+        # tenant.source_for_associations.add(
+        #     RelationshipAssociation.objects.create(
+        #         source_type="Namespace",
+        #         source_id=tenant.id,
+        #         destination_type="Tenant",
+        #         destination_id=tenant.id,
+        #     )
+        # )
         tenant.validated_save()
         # relationship = RelationshipAssociation.objects.create(
         #     source_type="Namespace",
