@@ -90,7 +90,7 @@ class AciTenant(Job):
             destination_id=Namespace.objects.get(name=f"{environment}_{site}_{tenant_name}").id,
         )
         relationship.validated_save()
-        self.logger.info("Created new location %s", tenant_name)
+        self.logger.info("Created new tenant %s", tenant_name)
         return tenant
 
     def run_workflow(self, token):
