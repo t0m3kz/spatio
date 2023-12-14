@@ -65,10 +65,9 @@ class AciTenant(Job):
             # source_ipam_namespace=Namespace.objects.get(name="Global"),
 
             # source_for_associations=
-            # source_for_associations={
-            #     "source_id": Namespace.objects.get(name="Global").id,
-            #     "source_type": "Namespace",
-            # }
+            source_for_associations={
+                "source_id": Namespace.objects.get(name="Global").id,
+            }
         )
         tenant.tags.add(Tag.objects.get(name="ACI"))
         tenant.tags.add(Tag.objects.get(name=environment))
@@ -83,14 +82,14 @@ class AciTenant(Job):
         #     )
         # )
         tenant.validated_save()
-        _relationship = RelationshipAssociation(
-            source_type="ipam.namespace",
-            source_id=Namespace.objects.get(name=f"{environment}_{site}_{tenant_name}").id,
-            destination_type="ipam.namespace",
-            destination_id=Namespace.objects.get(name="Global").id,
-            relationship=Relationship.objects.get(label="Nested Namespaces"),
-        )
-        _relationship.validated_save()
+        # _relationship = RelationshipAssociation(
+        #     source_type="ipam.namespace",
+        #     source_id=Namespace.objects.get(name=f"{environment}_{site}_{tenant_name}").id,
+        #     destination_type="ipam.namespace",
+        #     destination_id=Namespace.objects.get(name="Global").id,
+        #     relationship=Relationship.objects.get(label="Nested Namespaces"),
+        # )
+        # _relationship.validated_save()
         self.logger.info("Created new tenant %s", tenant_name)
         return tenant
 
