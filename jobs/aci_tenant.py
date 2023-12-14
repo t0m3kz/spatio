@@ -83,14 +83,14 @@ class AciTenant(Job):
         #     )
         # )
         tenant.validated_save()
-        relationship = RelationshipAssociation(
+        _relationship = RelationshipAssociation(
             source_type="ipam.namespace",
             source_id=Namespace.objects.get(name=f"{environment}_{site}_{tenant_name}").id,
             destination_type="ipam.namespace",
             destination_id=Namespace.objects.get(name="Global").id,
             relationship=Relationship.objects.get(display="Nested Namespaces"),
         )
-        relationship.validated_save()
+        _relationship.validated_save()
         self.logger.info("Created new tenant %s", tenant_name)
         return tenant
 
