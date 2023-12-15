@@ -14,7 +14,7 @@ class AciTest(Job):
 
     sites = MultiObjectVar(
         model=Location, query_params={"location_type": "Site"}, display_field="name"
-    ).form_field(widget=SelectMultiple(attrs={"size": 10}))
+    )
     # sites = [site.name for site in selected_sites]
 
     ENVIRONMENTS = (("LAB", "LAB"), ("PROD", "PRODUCTION"))
