@@ -17,7 +17,6 @@ class AciTest(Job):
     sites = MultiObjectVar(
         model=Location, query_params={"location_type": "Site"}, display_field="name"
     )
-    sites = [site.name for site in sites]
 
     ENVIRONMENTS = (("LAB", "LAB"), ("PROD", "PRODUCTION"))
 
