@@ -15,7 +15,7 @@ class AciTest(Job):
         model=Location, query_params={"location_type": "Site"}, display_field="name"
     )
 
-    ENVIRONMENTS = (("LAB", "LAB"), ("PROD", "Production"))
+    ENVIRONMENTS = (("LAB", "LAB"), ("PROD", "PRODUCTION"))
 
     environment = MultiChoiceVar(choices=ENVIRONMENTS)
 
