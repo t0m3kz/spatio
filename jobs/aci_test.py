@@ -14,6 +14,7 @@ class AciTest(Job):
     sites = MultiObjectVar(
         model=Location, query_params={"location_type": "Site"}, display_field="name"
     )
+    sites = [site.name for site in sites]
 
     ENVIRONMENTS = (("LAB", "LAB"), ("PROD", "PRODUCTION"))
 
@@ -34,9 +35,9 @@ class AciTest(Job):
 
         self.logger.info("Creating new test...")
         try:
-            sites = [site.name for site in data["sites"]]
+
             devices = Device.objects.filter(
-                location__name__in=sites,
+                location__name__in=data["sites"],
                 role__name="controller",
                 platform__name="aci",
                 name__contains="01",
@@ -49,7 +50,7 @@ class AciTest(Job):
                 "Test %s created for %s in %s using %s",
                 data["tenant_name"],
                 data["environment"],
-                sites,
+                data["sites"],
                 apics,
             )
             # self.run_workflow(token=os.getenv("GITHUB_TOKEN"))
