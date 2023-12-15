@@ -1,5 +1,5 @@
 """Test Job"""
-from nautobot.extras.jobs import Job, StringVar, MultiObjectVar, ChoiceVar
+from nautobot.extras.jobs import Job, StringVar, MultiObjectVar, MultiChoiceVar
 from nautobot.dcim.models import Location, Device
 
 
@@ -17,7 +17,7 @@ class AciTest(Job):
 
     ENVIRONMENTS = (("LAB", "LAB"), ("PROD", "Production"))
 
-    environment = ChoiceVar(choices=ENVIRONMENTS)
+    environment = MultiChoiceVar(choices=ENVIRONMENTS)
 
     tenant_name = StringVar(description="Name of the tenant")
 
@@ -40,7 +40,7 @@ class AciTest(Job):
                 role__name="controller",
                 platform__name="aci",
                 name__contains="01",
-                tags__name=data["environment"],
+                tags__name__in=data["environment"],
             )
 
             apics = [device.name for device in devices]
