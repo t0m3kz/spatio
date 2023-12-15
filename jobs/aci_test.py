@@ -11,10 +11,10 @@ class AciTest(Job):
     System job to deploy a new branch office
     """
 
-    sites = MultiObjectVar(
+    selected_sites = MultiObjectVar(
         model=Location, query_params={"location_type": "Site"}, display_field="name"
     )
-    sites = [site.name for site in sites]
+    sites = [site.name for site in selected_sites]
 
     ENVIRONMENTS = (("LAB", "LAB"), ("PROD", "PRODUCTION"))
 
