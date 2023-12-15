@@ -38,6 +38,7 @@ class AciTest(Job):
             devices = Device.objects.filter(
                 location__name__in=sites,
                 role__name="controller",
+                platform__name="aci",
                 name__contains="01",
                 tags__name=data["environment"],
             )
