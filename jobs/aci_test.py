@@ -36,7 +36,7 @@ class AciTest(Job):
         try:
 
             devices = Device.objects.get(
-                location=data["sites"],
+                location__name__in=data["sites"],
                 role__name="controller",
                 name__contains="01",
             )
