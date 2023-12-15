@@ -35,7 +35,7 @@ class AciTest(Job):
         self.logger.info("Creating new test...")
         try:
 
-            devices = Device.objects.filter(
+            devices = Device.objects.get(
                 location=data["sites"],
                 role__name="controller",
                 name__contains="01",
