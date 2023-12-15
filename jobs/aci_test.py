@@ -39,6 +39,7 @@ class AciTest(Job):
                 location__name__in=sites,
                 role__name="controller",
                 name__contains="01",
+                tags__name=data["environment"],
             )
 
             apics = [device.name for device in devices]
