@@ -37,7 +37,7 @@ class AciTest(Job):
 
             devices = Device.objects.filter(
                 location=data["sites"],
-                role="controller",
+                role__name="controller",
                 name__contains="01",
             )
 
