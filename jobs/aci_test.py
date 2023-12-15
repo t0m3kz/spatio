@@ -94,6 +94,7 @@ class AciTest(Job):
                 sites,
                 apics,
             )
+            self.create_new_tenant(data["tenant_name"], data["environment"], sites)
             # self.run_workflow(token=os.getenv("GITHUB_TOKEN"))
         finally:
             self.logger.info("Deployment completed successfully.")
