@@ -38,7 +38,7 @@ class AciTest(Job):
             devices = Device.objects.filter(
                 location=data["sites"],
                 role="controller",
-                name__iew="01",
+                name__contains="01",
             )
 
             apics = [device.name for device in devices]
