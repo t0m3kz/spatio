@@ -82,7 +82,7 @@ class AciTest(Job):
                 role__name="controller",
                 platform__name="aci",
                 name__contains="01",
-                tags__name__in=data["environment"],
+                tags__name=data["environment"],
             )
 
             apics = [device.name for device in devices]
