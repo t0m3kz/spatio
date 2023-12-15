@@ -36,9 +36,9 @@ class AciTest(Job):
         try:
             sites = [site.name for site in data["sites"]]
             devices = Device.objects.filter(
-                location__ic=sites,
+                location=sites,
                 role="controller",
-                name__ic="01",
+                name__iew="01",
             )
             apics = [device.name for device in devices]
             self.logger.info(
