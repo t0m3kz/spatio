@@ -34,7 +34,8 @@ class AciTest(Job):
 
         self.logger.info("Creating new test...")
         try:
-            sites = [site.name for site in data["sites"]]
+            # sites = [site.name for site in data["sites"]]
+
             devices = Device.objects.get(
                 location__name__in=data["sites"],
                 role__name="controller",
@@ -42,7 +43,7 @@ class AciTest(Job):
             )
 
             apics = [device.name for device in devices]
-
+            sites = [site.name for site in data["sites"]]
             self.logger.info(
                 "Test %s created for %s in %s using %s",
                 data["tenant_name"],
